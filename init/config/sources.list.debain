@@ -1,0 +1,8 @@
+deb {url}/{distribution}/ {code} main non-free contrib
+deb-src {url}/{distribution}/ {code} main non-free contrib
+deb {url}/{distribution}-security {code}/updates main
+deb-src {url}/{distribution}-security {code}/updates main
+deb {url}/{distribution}/ {code}-updates main non-free contrib
+deb-src {url}/{distribution}/ {code}-updates main non-free contrib
+#deb {url}/{distribution}/ {code}-backports main non-free contrib
+#deb-src {url}/{distribution}/ {code}-backports main non-free contrib

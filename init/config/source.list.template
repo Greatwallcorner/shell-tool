@@ -1,0 +1,14 @@
+deb {url}/{distribution}/ {code} main restricted universe multiverse
+deb-src {url}/{distribution}/  {code} main restricted universe multiverse
+deb {url}/{distribution}/  {code}-security main restricted universe multiverse
+deb-src {url}/{distribution}/  {code}-security main restricted universe multiverse
+
+deb {url}/{distribution}/  {code}-updates main restricted universe multiverse
+deb-src {url}/{distribution}/  {code}-updates main restricted universe multiverse
+
+deb {url}/{distribution}/  {code}-backports main restricted universe multiverse
+deb-src {url}/{distribution}/  {code}-backports main restricted universe multiverse
+
+## Not recommended
+# deb https://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+# deb-src https://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse

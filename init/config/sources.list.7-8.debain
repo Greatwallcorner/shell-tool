@@ -1,0 +1,4 @@
+deb {url}/{distribution}/ {code} main non-free contrib
+deb {url}/{distribution}/ {code}-proposed-updates main non-free contrib
+deb-src {url}/{distribution}/ {code} main non-free contrib
+deb-src {url}/{distribution}/ {code}-proposed-updates main non-free contrib
