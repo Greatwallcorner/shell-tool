@@ -6,8 +6,12 @@ sys_name=$(sudo cat /etc/os-release | grep ^ID= | cut -d\= -f2| sed 's/"//g')
 sys_code=$(sudo cat /etc/os-release | grep ^VERSION_ID= | cut -d\= -f2| sed 's/"//g')
 #系统别名
 alias_code=''
-#镜像url
+#阿里镜像url
 url=' http://mirrors.aliyun.com'
+#清华镜像url
+tsinghua_url='https://mirrors.tuna.tsinghua.edu.cn/'
+
+
 
 if [[ $(command -v yum) ]];then
     cmd='yum'
