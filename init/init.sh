@@ -17,10 +17,10 @@ _execute(){
 
 installBaseTool(){
     echo "建议先执行镜像配置"
-    $cmd install -y python3 python3-pip git busybox npm
+    $cmd install -y python3 python3-pip git busybox npm vim
     # 配置镜像
-    pip3 config set global.index_url 'https://mirrors.cloud.aliyuncs.com/pypi/simple/'
-    pip3 config set install.trusted-host 'mirrors.cloud.aliyuncs.com'
+    pip3 config set global.index_url 'https://mirrors.aliyun.com/pypi/simple/'
+    pip3 config set install.trusted-host 'mirrors.aliyun.com'
     npm config set registry http://registry.npmmirror.com
 }
 
