@@ -36,7 +36,7 @@ install_shell_tool(){
     [ -d $dir ] && rm -rf $dir
     mkdir -p $dir 
     git clone -b main https://github.com/Greatwallcorner/shell-tool.git $dir --depth=1
-    chmod +x $dir/**
+    chmod -R +x $dir
     . $dir/init/init.sh
 }
 
