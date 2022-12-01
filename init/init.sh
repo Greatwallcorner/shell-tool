@@ -26,13 +26,20 @@ show_help_info(){
 
 
 _execute(){
-    local currentDir=$(pwd)
-    . "$currentDir/$@"
+    . "$dir/$@"
+}
+
+# 删除文件中的一行
+# 参数：关键字 文件
+delete_line_in_file(){
+    num=$(cat $2 | grep -n $1 | cut -d ":" -f 1)
+    [ $num ] && sed -i $num\d $2 && echo "删除文件：$2 中的第$num行 关键字:$1"
 }
 
 config_proxy(){
-    echo -p "请输入代理端口:" port
-    echo -p "请输入协议[http/socks5]:" proto
+    [ proxy=$(cat $env | grep ALL_PROXY) ] && echo "已有代理：$proxy"
+    read -p "请输入代理端口:" port
+    read -p "请输入协议[http/socks5]:" proto
     if [ ! $proto = 'http' || ! $proto = "socks5" ]; then
         echo "输入错误"
         exit 1
@@ -69,8 +76,9 @@ install_shell_tool(){
 uninstall_shell_tool(){
     # 删除环境变量
     echo "删除环境变量"
-    lineNumber=$(cat /etc/environment | grep -n "shtool" | cut -d ":" -f 1)
-    [ $lineNumber ] && sed -i $lineNumber\d $env
+    delete_line_in_file "shtool" $env
+    # lineNumber=$(cat /etc/environment | grep -n "shtool" | cut -d ":" -f 1)
+    # [ $lineNumber ] && sed -i $lineNumber\d $env
     rm -rf $dir > /dev/null
     echo "删除目录:$dir"
 }
@@ -90,9 +98,9 @@ echo "5. 展示工具列表"
 echo "6. wsl配置代理"
 read -p "请输入编号：" -d$'\n' num
 case $num in
-1) _execute config_pm_mirror.sh
+1) _execute init/config_pm_mirror.sh
 ;;
-2) _execute install_zsh.sh
+2) _execute init/install_zsh.sh
 ;;
 3) installBaseTool
 ;;
