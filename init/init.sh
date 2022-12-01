@@ -77,6 +77,7 @@ uninstall_shell_tool(){
     # 删除环境变量
     echo "删除环境变量"
     delete_line_in_file "shtool" $env
+    delete_line_in_file "shell-tool" $env
     # lineNumber=$(cat /etc/environment | grep -n "shtool" | cut -d ":" -f 1)
     # [ $lineNumber ] && sed -i $lineNumber\d $env
     rm -rf $dir > /dev/null
