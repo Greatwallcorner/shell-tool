@@ -1,5 +1,8 @@
 # shell
-shell 脚本
+shell 脚本工具
+# 安装本工具
+bash <(curl -s -L http://raw.githubusercontent.com/Greatwallcorner/shell-tool/main/init/init.sh)
+安装目录： /usr/lib/shell-tool
 
 # 支持的系统
 1. ubuntu

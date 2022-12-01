@@ -1,4 +1,8 @@
 #! /bin/bash
+
+dir="/usr/lib/shell-tool"
+env="/etc/environment"
+
 # 设置包管理器镜像
 cmd="apt-get"
 if [[ $(command -v yum) ]];then
@@ -14,10 +18,27 @@ is_installed(){
     [ -z $(command -v $1) ] && $cmd install $1
 }
 
+show_help_info(){
+    echo "----------------"
+    echo "输入shtool使用本工具"
+    echo "----------------"
+}
+
 
 _execute(){
     local currentDir=$(pwd)
     . "$currentDir/$@"
+}
+
+config_proxy(){
+    echo -p "请输入代理端口:" port
+    echo -p "请输入协议[http/socks5]:" proto
+    if [ ! $proto = 'http' || ! $proto = "socks5" ]; then
+        echo "输入错误"
+        exit 1
+    fi
+    ip=$(cat /etc/resolv.conf| grep nameserver | cut -d " " -f 2)
+    echo ALL_PROXY=$proto://$ip$port >> $env
 }
 
 installBaseTool(){
@@ -29,33 +50,44 @@ installBaseTool(){
     npm config set registry http://registry.npmmirror.com
 }
 
-dir="/usr/lib/shell-tool"
-
 install_shell_tool(){
     is_installed git
     [ -d $dir ] && rm -rf $dir
     mkdir -p $dir 
     git clone -b main https://github.com/Greatwallcorner/shell-tool.git $dir --depth=1
     chmod -R +x $dir
+    #添加环境变量
+    if [ ! "$(cat /root/.profile | grep shtool)" ]; then
+        echo "alias shtool=$dir/init/init.sh" >> $env
+        echo "PATH=$PATH:$dir/tool" >> $env
+        source /etc/environment
+    fi
+    show_help_info
     . $dir/init/init.sh
 }
 
 uninstall_shell_tool(){
-    rm -rf $dir
+    # 删除环境变量
+    echo "删除环境变量"
+    lineNumber=$(cat /etc/environment | grep -n "shtool" | cut -d ":" -f 1)
+    [ $lineNumber ] && sed -i $lineNumber\d $env
+    rm -rf $dir > /dev/null
     echo "删除目录:$dir"
 }
 
 # 安装目录 /usr/lib/shell-tool
-if [ ! -d /usr/lib/shell-tool ] || [ ! -d /usr/lib/shell-tool/init ];then
+if [ ! -d $dir ] || [ ! -d $dir/init ];then
     install_shell_tool
-    exit 
+    exit 1
 fi
-[ ! -d /usr/lib/shell-tool/init ] && exit 1
+[ ! -d $dir/init ] && exit 1
 echo "------------"
 echo "1. 配置镜像源"
 echo "2. 配置zsh"
 echo "3. 安装基础工具"
 echo "4. 卸载本工具"
+echo "5. 展示工具列表"
+echo "6. wsl配置代理"
 read -p "请输入编号：" -d$'\n' num
 case $num in
 1) _execute config_pm_mirror.sh
@@ -65,6 +97,10 @@ case $num in
 3) installBaseTool
 ;;
 4) uninstall_shell_tool
+;;
+5) ls $dir/tool
+;;
+6) config_proxy
 ;;
 esac
 
