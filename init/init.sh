@@ -37,15 +37,17 @@ delete_line_in_file(){
 }
 
 config_proxy(){
-    [ proxy=$(cat $env | grep ALL_PROXY) ] && echo "已有代理：$proxy"
+    isExist=$(cat $env | grep ALL_PROXY)
+    [ $isExist ] && echo "已有代理：$isExist"
     read -p "请输入代理端口:" port
     read -p "请输入协议[http/socks5]:" proto
-    if [ ! $proto = 'http' || ! $proto = "socks5" ]; then
+    if [[ "$proto" != "http" && "$proto" != "socks5" ]]; then
         echo "输入错误"
         exit 1
     fi
+    delete_line_in_file "ALL_PROXY" $env
     ip=$(cat /etc/resolv.conf| grep nameserver | cut -d " " -f 2)
-    echo ALL_PROXY=$proto://$ip$port >> $env
+    echo ALL_PROXY=$proto://$ip:$port >> $env
 }
 
 installBaseTool(){
@@ -54,7 +56,10 @@ installBaseTool(){
     # 配置镜像
     pip3 config set global.index_url 'https://mirrors.aliyun.com/pypi/simple/'
     pip3 config set install.trusted-host 'mirrors.aliyun.com'
-    npm config set registry http://registry.npmmirror.com
+    echo "安装nvm"
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+    [ $(command -v nvm) ] && nvm install --lts && npm config set registry http://registry.npmmirror.com
+    
 }
 
 install_shell_tool(){
